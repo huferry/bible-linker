@@ -19,10 +19,11 @@ function extract(text, grabber) {
 function parse(verse) {
     const match = verse.match(/(\d+)\:(\d)+(-(\d+))?/)
     if (match) {
-        return {
+        const result = {
             chapter: parseInt(match[1]),
-            verseFrom: parseInt(match[2]),
-            verseTo: match.length > 3 ? parseInt(match[4]) : undefined
+            verseFrom: parseInt(match[2])
         }
+
+        return match[4] ? {...result, ...{verseTo: parseInt((match[4]))}} : result
     }
 }

@@ -9,7 +9,15 @@ const bibleLink = (text, language, linker) => {
     return link(text, linker, extractor)
 } 
 
+const youVersionLinkerByLanguage = language => data => {
+    const dataWithLanguage = {...data, language}
+    return youVersionLinker(dataWithLanguage)
+}
+
+const youVersion = (text, language) => 
+    bibleLink(text, language, youVersionLinkerByLanguage(language))
+
 module.exports = { 
     bibleLink,
-    youVersion: (text, language) => bibleLink(text, language, youVersionLinker) 
+    youVersion 
 }
