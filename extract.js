@@ -17,7 +17,7 @@ function extract(text, grabber) {
 }
 
 function parse(verse) {
-    const match = verse.match(/(\d+)\:(\d)+(-(\d+))?/)
+    const match = verse.match(/(\d+)\:(\d+)(-(\d+))?/)
     if (match) {
         const result = {
             chapter: parseInt(match[1]),
