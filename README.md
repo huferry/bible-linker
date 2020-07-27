@@ -9,7 +9,7 @@ const { bibleLink, youVersion } = require('bible-linker')
 const processed = bibleLink(
     'In the verse Gen 3:5-6...', 'en', ownLinker)
 
-function linker({
+function ownLinker({
     grabbed,
     language,
     bookIndex,
