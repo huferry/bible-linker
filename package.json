@@ -1,0 +1,27 @@
+{
+  "name": "bible-linker",
+  "version": "1.0.0",
+  "description": "Recognize Bible verse reference in a piece of text and preprocess the text.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huferry/bible-linker.git"
+  },
+  "keywords": [
+    "bible",
+    "preprocessor",
+    "hyperlink"
+  ],
+  "author": "F. Utomo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huferry/bible-linker/issues"
+  },
+  "homepage": "https://github.com/huferry/bible-linker#readme",
+  "devDependencies": {
+    "jest": "^26.1.0"
+  }
+}
