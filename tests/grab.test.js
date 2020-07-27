@@ -160,4 +160,20 @@ describe('grab', () => {
         }])
     })
 
+    test('with language and with book volume, returns from actual bible and book volume', () => {
+
+        // Arrange
+        const verse = '1 Kor 2:3'
+
+        // Act
+        const actual = grab(
+            `Quote from ${verse} says..`, 'id')
+
+        // Assert
+        expect(actual).toStrictEqual([{
+            grabbed: verse,
+            bookIndex: 45
+        }])
+    })
+
 })
