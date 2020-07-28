@@ -1,6 +1,6 @@
 {
   "name": "bible-linker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Recognize Bible verse reference in a piece of text and preprocess the text.",
   "main": "index.js",
   "scripts": {
@@ -23,5 +23,8 @@
   "homepage": "https://github.com/huferry/bible-linker#readme",
   "devDependencies": {
     "jest": "^26.1.0"
+  },
+  "dependencies": {
+    "html-entities": "^1.3.1"
   }
 }

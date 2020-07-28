@@ -192,4 +192,20 @@ describe('grab', () => {
         }])
     })
 
+    test('with diacrtics in HTML encode, should recognize diacritics', () => {
+
+        // Arrange
+        const verse = 'Hebree&euml;n 11:9'
+
+        // Act
+        const actual = grab(
+            `Quote from ${verse} says..`, ['Hebreeën'])
+
+        // Assert
+        expect(actual).toStrictEqual([{
+            grabbed: verse,
+            bookIndex: 0
+        }])
+    })
+
 })

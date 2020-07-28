@@ -1,8 +1,11 @@
 const bibleIndex = require('./bibleIndex')
+const Entities = require('html-entities').AllHtmlEntities;
+ 
+const entities = new Entities();
 
 module.exports = grab
 
-const candidatePattern = `((\\d\\s)?[a-ž]+)\\s\\d+\\:\\d+(-\\d+)?`
+const candidatePattern = `((\\d\\s)?[a-ž;&]+)\\s\\d+\\:\\d+(-\\d+)?`
 const candidateGlobalRegex = new RegExp(candidatePattern, 'gi')
 const candidateSingleRegex = new RegExp(candidatePattern, 'i')
 
@@ -32,12 +35,18 @@ const grabByLanguage = (text, language) =>
 const getBookIndex = (grabbed, patterns) => {
     const match = grabbed.match(candidateSingleRegex)
     if (match) {
-        const book = match[1]
+        const bookRegExp = new RegExp(`^${match[1]}`, 'i')
         return patterns.reduce((result, pattern, index) => {
-            if (result === undefined 
-                && pattern.match(new RegExp(`^${book}`, 'i'))) {
+
+            const patternHtmlEncode = entities.encode(pattern)
+
+            if (result !== undefined) return result
+
+            if (pattern.match(bookRegExp)
+            || patternHtmlEncode.match(bookRegExp)) {
                 return index
             }
+
             return result
         }, undefined)
     }
