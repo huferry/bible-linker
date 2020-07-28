@@ -2,7 +2,7 @@ const bibleIndex = require('./bibleIndex')
 
 module.exports = grab
 
-const candidatePattern = `((\\d\\s)?[a-z]+)\\s\\d+\\:\\d+(-\\d+)?`
+const candidatePattern = `((\\d\\s)?[a-ž]+)\\s\\d+\\:\\d+(-\\d+)?`
 const candidateGlobalRegex = new RegExp(candidatePattern, 'gi')
 const candidateSingleRegex = new RegExp(candidatePattern, 'i')
 

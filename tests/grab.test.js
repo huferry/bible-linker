@@ -176,4 +176,20 @@ describe('grab', () => {
         }])
     })
 
+    test('with diacrtics, should recognize diacritics', () => {
+
+        // Arrange
+        const verse = 'Ezechiël 2:3'
+
+        // Act
+        const actual = grab(
+            `Quote from ${verse} says..`, 'nl')
+
+        // Assert
+        expect(actual).toStrictEqual([{
+            grabbed: verse,
+            bookIndex: 25
+        }])
+    })
+
 })
