@@ -160,20 +160,22 @@ describe('grab', () => {
         }])
     })
 
-    test('with language and with book volume, returns from actual bible and book volume', () => {
+    test.each([
+        ['1 Kor 2:3', 45],
+        ['1 Raja-Raja 1:4-10', 10]
+    ])
+    ('with bible name %s, should grab verse with index', 
+        (grabbed, bookIndex) => {
+            // Arrange
+            // Act
+            const actual = grab(
+                `Quote from ${grabbed} says..`, 'id')
 
-        // Arrange
-        const verse = '1 Kor 2:3'
-
-        // Act
-        const actual = grab(
-            `Quote from ${verse} says..`, 'id')
-
-        // Assert
-        expect(actual).toStrictEqual([{
-            grabbed: verse,
-            bookIndex: 45
-        }])
+            // Assert
+            expect(actual).toStrictEqual([{
+                grabbed,
+                bookIndex
+            }])
     })
 
     test('with diacrtics, should recognize diacritics', () => {
@@ -206,6 +208,78 @@ describe('grab', () => {
             grabbed: verse,
             bookIndex: 0
         }])
+    })
+
+    test('with multiple verse, should grab double', () => {
+        
+        // Arrange
+        const book = 'Psalms'
+        const chapter = '119'
+        const group1 = '1-10'
+        const group2 = '15-20'
+        const compound = `${book} ${chapter}:${group1},${group2}`
+
+        // Act
+        const actual = grab(
+            `These are the verse ${compound}, please look`,
+            ['Psalms']
+        )
+
+        // Assert
+        expect(actual).toStrictEqual([
+            {
+                grabbed: `${book} ${chapter}:${group1}`,
+                bookIndex: 0
+            },
+            {
+                grabbed: `,${group2}`,
+                bookIndex: 0
+            }
+        ])
+    })
+
+    test('with duplicate compound verse, should not grab compound', () => {
+        
+        // Arrange
+        // Act
+        const actual = grab(
+            `Verses in Psalms 1:1-2,4-5 are different from Genesis 1:1-2,4-5`,
+            ['Psalms', 'Genesis']
+        )
+
+        // Assert
+        expect(actual).toStrictEqual([
+            {
+                grabbed: 'Psalms 1:1-2',
+                bookIndex: 0
+            },
+            {
+                grabbed: 'Genesis 1:1-2',
+                bookIndex: 1
+            }
+        ])
+    })
+
+    test('with two verses, the other with range, grab two', () => {
+        
+        // Arrange
+        // Act
+        const actual = grab(
+            'Psalms 91:14 for more complete in Psalms 91:14-16',
+            ['Psalms']
+        )
+
+        // Assert
+        expect(actual).toStrictEqual([
+            {
+                grabbed: 'Psalms 91:14',
+                bookIndex: 0
+            },
+            {
+                grabbed: 'Psalms 91:14-16',
+                bookIndex: 0
+            }
+        ])
     })
 
 })

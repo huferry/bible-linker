@@ -5,9 +5,12 @@ function link(text, linker, extractor) {
 
     const extractedVerses = extractor(text)
 
+    const byGrabbedLength = (a,b) => 
+        b.grabbed - a.grabbed
+
     return !extractedVerses || extractedVerses.length == 0
         ? text
-        : extractedVerses.reduce(
+        : extractedVerses.sort(byGrabbedLength).reduce(
             (result, verses) => 
                 result.replace(
                     new RegExp(verses.grabbed, 'g'),

@@ -39,5 +39,39 @@ describe('link', () => {
         // Assert
         expect(actual).toBe(`the verse ${replacement} says`)
     })
+    
+    test('with multiple extractions, processed from the longest grabbed', () => {
+        // Arrange
+        const text = 'any text'
+
+        const extracted = [
+            { grabbed: '123' },
+            { grabbed: '1' },
+            { grabbed: '12345' },
+            { grabbed: '12' },
+        ]
+
+        const extractor = data =>
+            data === text ? extracted : []
+
+        const linked = []
+
+        const linker = data => {
+            linked.push(data.grabbed)
+            return '#'
+        }
+        
+        // Act
+        link(text, linker, extractor)        
+
+        // Assert
+        expect(linked).toStrictEqual([
+            '12345',
+            '123',
+            '12',
+            '1'
+        ])
+        
+    })
 
 })

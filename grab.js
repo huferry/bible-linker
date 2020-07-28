@@ -5,7 +5,7 @@ const entities = new Entities();
 
 module.exports = grab
 
-const candidatePattern = `((\\d\\s)?[a-ž;&]+)\\s\\d+\\:\\d+(-\\d+)?`
+const candidatePattern = `((\\d\\s)?[a-ž;&-]+)\\s\\d+\\:\\d+(-\\d+)?`
 const candidateGlobalRegex = new RegExp(candidatePattern, 'gi')
 const candidateSingleRegex = new RegExp(candidatePattern, 'i')
 
@@ -17,16 +17,39 @@ function grab(text, patterns) {
         return grabByLanguage(text, patterns)
 
     const candidates = getCandidates(text)
-
-    return candidates.map(grabbed => {
+    .map(grabbed => {
         const bookIndex = getBookIndex(grabbed, patterns)
         return {
             grabbed,
-            bookIndex
+            bookIndex,
+            tail: getTail(text, grabbed)
         }
     })
     .filter(g => g.bookIndex !== undefined)
     .distinct()
+
+    const tails = candidates
+        .filter(g => g.tail != undefined)
+        .map(g => {
+            return {
+                grabbed: g.tail,
+                bookIndex: g.bookIndex
+            }
+        })
+
+    const union = tails.hasDuplicate()
+        ? candidates
+        : [...candidates, ...tails]
+
+    return union.map(g => {
+        delete g.tail
+        return g
+    })
+}
+
+const getTail = (text, grabbed) => {
+    const match = text.match(new RegExp(`${grabbed}(,\\d+-\\d+)`))
+    return match ? match[1] : undefined
 }
 
 const grabByLanguage = (text, language) => 
@@ -54,13 +77,6 @@ const getBookIndex = (grabbed, patterns) => {
 
 const getCandidates = text => text.match(candidateGlobalRegex)
 
-function getPartialMatch(candidate, pattern) {
-    const match = candidate.match(new RegExp(candidatePattern, 'i'))
-    const book = match[1]
-    if (pattern.match(new RegExp(`^${book}`, 'i'))) 
-        return candidate
-}
-
 Array.prototype.distinct = function() {
     if (!this) return []
     return this.reduce((result, element) => {
@@ -71,3 +87,7 @@ Array.prototype.distinct = function() {
     }, [])
 }
 
+Array.prototype.hasDuplicate = function() {
+    return this 
+        && this.length > this.distinct().length
+}
