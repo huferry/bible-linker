@@ -88,7 +88,7 @@ function linker({
     const bookCode = bookCodes[bookIndex] || bookCodes[0]
     const translationCode = translations[language] || translations['en']
     const toRange = verseTo 
-        ? `.${verseTo}`
+        ? `-${verseTo}`
         : ''
 
     const url = `https://bible.com/bible/${translationCode}/${bookCode}.${chapter}.${verseFrom}${toRange}`
