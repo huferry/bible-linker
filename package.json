@@ -1,6 +1,6 @@
 {
   "name": "bible-linker",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Recognize Bible verse reference in a piece of text and preprocess the text.",
   "main": "index.js",
   "scripts": {

@@ -74,4 +74,29 @@ describe('link', () => {
         
     })
 
+    test('with extractions that partly equal each other, should replace both separately', () => {
+        // Arrange
+        const verses = ['Psalms 91:14', 'Psalms 91:14-16']
+
+        const extracted = verses.map(v => {
+            return {
+                grabbed: v
+            }
+        })
+
+        const text = `verses ${verses[0]} and from ${verses[1]}`
+
+        const expected = `verses <u>${verses[0]}</u> and from <u>${verses[1]}</u>`
+    
+        const extractor = data =>
+            data === text ? extracted : []
+
+        const linker = data => `<u>${data.grabbed}</u>`
+        
+        // Act
+        const actual = link(text, linker, extractor)        
+
+        // Assert
+        expect(actual).toBe(expected)        
+    })
 })

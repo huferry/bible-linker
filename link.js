@@ -6,15 +6,28 @@ function link(text, linker, extractor) {
     const extractedVerses = extractor(text)
 
     const byGrabbedLength = (a,b) => 
-        b.grabbed - a.grabbed
+        b.grabbed.length - a.grabbed.length
 
-    return !extractedVerses || extractedVerses.length == 0
-        ? text
-        : extractedVerses.sort(byGrabbedLength).reduce(
-            (result, verses) => 
-                result.replace(
-                    new RegExp(verses.grabbed, 'g'),
-                    linker(verses)
-                ),
-            text)
+    if (!extractedVerses || extractedVerses.length == 0) return text
+
+    const codedExtractedVerses = extractedVerses
+        .sort(byGrabbedLength)
+        .map((extraction, index) => {
+            const id = `***###${index}###***`
+            const replacement = linker(extraction)
+            return {...extraction, id, replacement}
+        })
+
+    const firstPass = codedExtractedVerses
+        .reduce((firstPass, verse) => 
+            firstPass.replace(
+                    new RegExp(verse.grabbed, 'g'), 
+                    verse.id),
+            text
+        )
+
+    return codedExtractedVerses
+        .reduce((secondPass, verse) => 
+            secondPass.replace(verse.id, verse.replacement),
+            firstPass)
 }
