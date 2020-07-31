@@ -49,7 +49,7 @@ function grab(text, patterns) {
 }
 
 const getTail = (text, grabbed) => {
-    const match = text.match(new RegExp(`${grabbed}(,\\d+-\\d+)`))
+    const match = text.match(new RegExp(`${grabbed}(,(\\d+:)?\\d+-\\d+)`))
     return match ? match[1] : undefined
 }
 
