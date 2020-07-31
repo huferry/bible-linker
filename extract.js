@@ -9,7 +9,7 @@ function extract(text, grabber) {
         if (index>0) {
             verse.previous = grabbedTexts[index-1].grabbed
         }
-    })
+    }, 0)
 
     return grabbedTexts
         .map(processGrabbedText)
