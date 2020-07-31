@@ -13,7 +13,7 @@ function link(text, linker, extractor) {
     const codedExtractedVerses = extractedVerses
         .sort(byGrabbedLength)
         .map((extraction, index) => {
-            const id = `***###${index}###***`
+            const id = `@@@###${index}###@@@`
             const replacement = linker(extraction)
             return {...extraction, id, replacement}
         })
@@ -28,6 +28,8 @@ function link(text, linker, extractor) {
 
     return codedExtractedVerses
         .reduce((secondPass, verse) => 
-            secondPass.replace(verse.id, verse.replacement),
-            firstPass)
+            secondPass.replace(
+                new RegExp(verse.id, 'g'), 
+                verse.replacement),
+        firstPass)
 }
