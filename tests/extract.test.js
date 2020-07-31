@@ -40,9 +40,9 @@ describe('extract', () => {
 
     test('when grabbed contains parent, parse from parent', () => {
         // Arrange
-        const grabbed = '11-15'
+        const grabbed = ',11-15'
         const parent = 'Gen 1:1-3'
-        const text = `${parent},${grabbed}`
+        const text = `${parent}${grabbed}`
 
         const grabFn = t => 
         t === text 

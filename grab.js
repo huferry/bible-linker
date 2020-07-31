@@ -33,7 +33,8 @@ function grab(text, patterns) {
         .map(g => {
             return {
                 grabbed: g.tail,
-                bookIndex: g.bookIndex
+                bookIndex: g.bookIndex,
+                parent: g.grabbed
             }
         })
 

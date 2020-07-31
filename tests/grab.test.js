@@ -233,6 +233,7 @@ describe('grab', () => {
             },
             {
                 grabbed: `,${group2}`,
+                parent: `${book} ${chapter}:${group1}`,
                 bookIndex: 0
             }
         ])
