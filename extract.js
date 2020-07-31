@@ -1,5 +1,6 @@
 module.exports = extract
 
+// Extract: parses the grabbed text into the chapter/verses
 function extract(text, grabber) {
 
     const grabbedTexts = grabber(text)
@@ -58,12 +59,12 @@ function parseChapterAndVerses(verse) {
 }
 
 function parseVerseRange(verse) {
-    const match = verse.match(/(\d+)-(\d+)/)
+    const match = verse.match(/(\d+)(-(\d+))?/)
     if (match) {
-        return {
-            verseFrom: parseInt(match[1]),
-            verseTo: parseInt(match[2])
-        }
+        const range = { verseFrom: parseInt(match[1]) }
+        return match[3]
+            ? { ...range, verseTo: parseInt(match[3]) }
+            : range
     }
 
     return {}

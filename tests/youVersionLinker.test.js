@@ -17,6 +17,5 @@ describe('youVersionLinker', () => {
 
         // Assert
         expect(actual).toBe('<a href="https://bible.com/bible/114/REV.12.3-18">#a text#</a>')
-
     })
 })

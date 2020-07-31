@@ -239,6 +239,35 @@ describe('grab', () => {
         ])
     })
 
+    test('with one range followed with one verse, should grab double', () => {
+        
+        // Arrange
+        const book = 'Psalms'
+        const chapter = '119'
+        const group1 = '1-10'
+        const group2 = '15'
+        const compound = `${book} ${chapter}:${group1},${group2}`
+
+        // Act
+        const actual = grab(
+            `These are the verse ${compound}, please look`,
+            ['Psalms']
+        )
+
+        // Assert
+        expect(actual).toStrictEqual([
+            {
+                grabbed: `${book} ${chapter}:${group1}`,
+                bookIndex: 0
+            },
+            {
+                grabbed: `,${group2}`,
+                parent: `${book} ${chapter}:${group1}`,
+                bookIndex: 0
+            }
+        ])
+    })
+
     test('with multiple chapter ranges, should grab double', () => {
         
         // Arrange
@@ -268,7 +297,6 @@ describe('grab', () => {
             }
         ])
     })
-
 
     test('with duplicate compound verse, should not grab compound', () => {
         
@@ -309,6 +337,34 @@ describe('grab', () => {
             },
             {
                 grabbed: 'Psalms 91:14-16',
+                bookIndex: 0
+            }
+        ])
+    })
+
+    test('with three ranges, grab all ranges', () => {
+        
+        // Arrange
+        // Act
+        const actual = grab(
+            'Psalms 5:1-3,5,6',
+            ['Psalms']
+        )
+
+        // Assert
+        expect(actual).toStrictEqual([
+            {
+                grabbed: 'Psalms 5:1-3',
+                bookIndex: 0
+            },
+            {
+                grabbed: ',5',
+                parent: 'Psalms 5:1-3',
+                bookIndex: 0
+            },
+            {
+                grabbed: ',6',
+                parent: 'Psalms 5:1-3',
                 bookIndex: 0
             }
         ])

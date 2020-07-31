@@ -94,4 +94,31 @@ describe('extract', () => {
         }])
     })
 
+    test('when grabbe a chapter range, followed with 1 verse', () => {
+        // Arrange
+        const grabbed = ',8'
+        const parent = 'Gen 1:1-3'
+        const text = `${parent}${grabbed}`
+
+        const grabFn = t => 
+        t === text 
+            ? [{ 
+                grabbed, 
+                parent,
+                bookIndex: 0 
+            }] 
+            : undefined
+
+        // Act
+        const actual = extract(text, grabFn)
+
+        // Assert
+        expect(actual).toStrictEqual([{
+            grabbed,
+            bookIndex: 0,
+            chapter: 1,
+            verseFrom: 8
+        }])
+    })
+
 })

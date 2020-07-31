@@ -19,12 +19,15 @@ function grab(text, patterns) {
     const candidates = getCandidates(text)
     .map(grabbed => {
         const bookIndex = getBookIndex(grabbed, patterns)
-        return {
-            grabbed,
-            bookIndex,
-            tail: getTail(text, grabbed)
-        }
+        const parent = { grabbed, bookIndex }
+        const tails = getTails(text, grabbed)
+            .map(tail => {
+                return { grabbed, bookIndex, tail }
+        })
+
+        return [ parent, ...tails ]
     })
+    .flat()
     .filter(g => g.bookIndex !== undefined)
     .distinct()
 
@@ -38,9 +41,12 @@ function grab(text, patterns) {
             }
         })
 
+    const candidateWithoutTail = candidates
+        .filter(c => c.tail === undefined)
+
     const union = tails.hasDuplicate()
-        ? candidates
-        : [...candidates, ...tails]
+        ? candidateWithoutTail
+        : [...candidateWithoutTail, ...tails]
 
     return union.map(g => {
         delete g.tail
@@ -49,8 +55,19 @@ function grab(text, patterns) {
 }
 
 const getTail = (text, grabbed) => {
-    const match = text.match(new RegExp(`${grabbed}\\s*(,\\s*(\\d+:)?\\d+-\\d+)`))
+    const match = text.match(new RegExp(`${grabbed}\\s*(,\\s*(\\d+:)?\\d+(-\\d+)?)`))
     return match ? match[1] : undefined
+}
+
+const getTails = (text, grabbed, list) => {
+    if (list === undefined) return getTails(text, grabbed, [])
+
+    const tail = getTail(text, grabbed)
+
+    return tail === undefined
+        ? list
+        : [tail, 
+            ...getTails(text, `${grabbed}${tail}`, list)]
 }
 
 const grabByLanguage = (text, language) => 
@@ -81,7 +98,9 @@ const getCandidates = text => text.match(candidateGlobalRegex)
 Array.prototype.distinct = function() {
     if (!this) return []
     return this.reduce((result, element) => {
-        if (!result.some(e => e.grabbed === element.grabbed)) {
+        if (!result.some(e => 
+                e.grabbed === element.grabbed
+                && e.tail === element.tail)) {
             return [...result, element]
         }
         return result
