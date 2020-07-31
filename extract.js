@@ -5,16 +5,26 @@ function extract(text, grabber) {
 
     const grabbedTexts = grabber(text)
 
+    grabbedTexts.reduce((_, verse, index) => {
+        if (index>0) {
+            verse.previous = grabbedTexts[index-1].grabbed
+        }
+    })
+
     return grabbedTexts
         .map(processGrabbedText)
         .filter(g => g !== undefined)
+        .map(g => {
+            delete g.previous
+            return g
+        })
 }
 
 function processGrabbedText(verse) {
     const { chapter, verseFrom, verseTo } = parseChapterAndVerses(verse.grabbed) 
 
     if (chapter === undefined || verseFrom === undefined) {
-        return processFromParent(verse)
+        return processFromParentOrSibling(verse)
     }
 
     return {
@@ -26,16 +36,16 @@ function processGrabbedText(verse) {
     }
 }
 
-function processFromParent(verse) {
-    if (!verse.parent) return
-
+function processFromParentOrSibling(verse) {
+    const sibling = parseChapterAndVerses(verse.previous)
     const parent = parseChapterAndVerses(verse.parent)
     const range = parseVerseRange(verse.grabbed)
+    const chapter = sibling.chapter || parent.chapter
 
-    if (parent.chapter && range.verseFrom) {
+    if (chapter && range.verseFrom) {
         const result = { 
             ...verse, 
-            chapter: parent.chapter, 
+            chapter, 
             ...range
         }
 
@@ -45,6 +55,8 @@ function processFromParent(verse) {
 }
 
 function parseChapterAndVerses(verse) {
+    if (!verse) return {}
+
     const match = verse.match(/(\d+)\:(\d+)(-(\d+))?/)
     if (match) {
         const result = {

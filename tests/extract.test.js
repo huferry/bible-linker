@@ -121,4 +121,58 @@ describe('extract', () => {
         }])
     })
 
+    test('with two children, last child gets the chapter from the sibling', () => {
+        // Arrange
+        const parent = 'Gen 1:1'
+        const child1 = '2:2-5'
+        const child2 = '8-9'
+
+        const text = 'any text'
+
+        const grabFn = _ => [
+            {
+                grabbed: parent,
+                bookIndex: 1
+            },
+            {
+                grabbed: child1,
+                parent,
+                bookIndex: 1
+            },
+            {
+                grabbed: child2,
+                parent,
+                bookIndex: 1
+            }
+        ]
+
+        // Act
+        const actual = extract(text, grabFn)
+
+        // Assert
+        expect(actual).toStrictEqual([
+            {
+                grabbed: parent,
+                bookIndex: 1,
+                chapter: 1,
+                verseFrom: 1,
+                verseTo: undefined
+            },
+            {
+                grabbed: child1,
+                bookIndex: 1,
+                chapter: 2,
+                verseFrom: 2,
+                verseTo: 5
+            },
+            {
+                grabbed: child2,
+                bookIndex: 1,
+                chapter: 2,
+                verseFrom: 8,
+                verseTo: 9
+            }
+        ])
+    })
+
 })
