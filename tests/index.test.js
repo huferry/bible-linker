@@ -15,13 +15,13 @@ describe('youVersion', () => {
 
     test('with double chapter ranges', () => {
         // Arrange
-        const text = 'Gen 1:1-3,2:5-7'
+        const text = 'Gen 1:1-3, 2:5-7'
 
         // Act
         const actual = youVersion(text, 'en')
 
         // Assert
-        expect(actual).toBe('<a href="https://bible.com/bible/114/GEN.1.1-3">Gen 1:1-3</a><a href="https://bible.com/bible/114/GEN.2.5-7">,2:5-7</a>')
+        expect(actual).toBe('<a href="https://bible.com/bible/114/GEN.1.1-3">Gen 1:1-3</a><a href="https://bible.com/bible/114/GEN.2.5-7">, 2:5-7</a>')
     })
 
 })

@@ -247,7 +247,7 @@ describe('grab', () => {
         const chapter2 = '119'
         const group1 = '1-10'
         const group2 = '15-20'
-        const compound = `${book} ${chapter1}:${group1},${chapter2}:${group2}`
+        const compound = `${book} ${chapter1}:${group1} , ${chapter2}:${group2}`
 
         // Act
         const actual = grab(
@@ -262,7 +262,7 @@ describe('grab', () => {
                 bookIndex: 0
             },
             {
-                grabbed: `,${chapter2}:${group2}`,
+                grabbed: `, ${chapter2}:${group2}`,
                 parent: `${book} ${chapter1}:${group1}`,
                 bookIndex: 0
             }
