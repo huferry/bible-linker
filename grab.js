@@ -16,7 +16,7 @@ function grab(text, patterns) {
     if (!Array.isArray(patterns)) 
         return grabByLanguage(text, patterns)
 
-    const candidates = getCandidates(text)
+    const mixedCandidates = getCandidates(text)
     .map(grabbed => {
         const bookIndex = getBookIndex(grabbed, patterns)
         const parent = { grabbed, bookIndex }
@@ -27,7 +27,8 @@ function grab(text, patterns) {
 
         return [ parent, ...tails ]
     })
-    .flat()
+
+    const candidates = flatten(mixedCandidates)
     .filter(g => g.bookIndex !== undefined)
     .distinct()
 
@@ -52,6 +53,17 @@ function grab(text, patterns) {
         delete g.tail
         return g
     })
+}
+
+const flatten = array => {
+    const result = []
+    array.forEach(item => {
+        if (Array.isArray(item)) 
+            item.forEach(x => result.push(x))
+        else
+            result.push(item)
+    })
+    return result
 }
 
 const getTail = (text, grabbed) => {
