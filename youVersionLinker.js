@@ -42,7 +42,7 @@ const books = {
     'mal': 'Malachi',
     'mat': 'Matthew',
     'mrk': 'Mark',
-    'lke': 'Luke',
+    'luk': 'Luke',
     'jhn': 'John',
     'act': 'Acts',
     'rom': 'Romans',
