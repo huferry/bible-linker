@@ -105,7 +105,7 @@ const getBookIndex = (grabbed, patterns) => {
     }
 }
 
-const getCandidates = text => text.match(candidateGlobalRegex)
+const getCandidates = text => text.match(candidateGlobalRegex) || []
 
 Array.prototype.distinct = function() {
     if (!this) return []

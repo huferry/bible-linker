@@ -35,4 +35,26 @@ describe('youVersion', () => {
         expect(actual).toBe("<a href=\"https://bible.com/bible/114/GEN.1.1-3\">Gen 1:1-3</a><a href=\"https://bible.com/bible/114/GEN.1.4-6\">,4-6</a><a href=\"https://bible.com/bible/114/GEN.1.10\">,10</a><a href=\"https://bible.com/bible/114/GEN.1.12-15\">,12-15</a>")
     })
 
+    test('with null, returns null', () => {
+        // Arrange
+        // Act
+        const actual = youVersion(null, 'en')
+
+        // Assert
+        expect(actual).toBe(null)
+
+    })
+
+    test('without reference, returns same as input', () => {
+        // Arrange
+        const text = 'no references'
+
+        // Act
+        const actual = youVersion(text, 'en')
+
+        // Assert
+        expect(actual).toBe(text)
+
+    })
+
 })
